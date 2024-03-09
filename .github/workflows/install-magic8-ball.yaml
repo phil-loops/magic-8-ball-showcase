@@ -1,5 +1,7 @@
 name: Install ✨ 🎱
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - "**"
