@@ -5,5 +5,5 @@ on:
       - "**"
 
 jobs:
-  magic8ball:
+  Magic8ball:
     uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
