@@ -6,7 +6,4 @@ on:
 
 jobs:
   magic8ball:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Invoke the Magic 8 Ball
-        uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
+    uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
