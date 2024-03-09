@@ -1,11 +1,12 @@
 name: Install ✨ 🎱
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-#   push:
-#     branches:
-#       - "**"
+  #   pull_request:
+  #     types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - "**"
 
 jobs:
   Magic8ball:
+    if: contains(github.event.head_commit.message, '/magic8ball')
     uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
