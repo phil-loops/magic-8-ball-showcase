@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
-        uses: phil-loops/LoopsMagic8Ball
+        uses: phil-loops/LoopsMagic8Ball@main
