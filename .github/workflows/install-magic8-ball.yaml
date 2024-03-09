@@ -5,8 +5,11 @@ on:
       - "**"
 
 jobs:
-  ask-eight-ball:
+  magic8ball:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Invoke Magic 8 Ball
         uses: phil-loops/LoopsMagic8Ball@main
