@@ -11,5 +11,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Invoke Magic 8 Ball
+      - name: Invoke the Magic 8 Ball
         uses: phil-loops/LoopsMagic8Ball@main
