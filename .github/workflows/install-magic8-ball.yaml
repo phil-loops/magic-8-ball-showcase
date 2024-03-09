@@ -1,0 +1,12 @@
+name: Install ✨ 🎱
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  ask-eight-ball:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: phil-loops/LoopsMagic8Ball
