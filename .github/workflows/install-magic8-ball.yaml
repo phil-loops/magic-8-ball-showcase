@@ -1,40 +1,28 @@
-name: Install ✨ 🎱
+name: Respond to PR Comment
 on:
   issue_comment:
     types: [created, edited]
 
 jobs:
-  filter:
+  comment-response:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/magic8ball')
     runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
     steps:
-      - id: check
-        uses: actions/echo@v1
-        with:
-          message: "::set-output name=should_run::true"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  Magic8ball:
-    needs: filter
-    if: needs.filter.outputs.should_run == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Magic 8 Ball Workflow
+      - name: Respond to Comment
         uses: actions/github-script@v6
         with:
           script: |
-            const prNumber = github.event.issue.number; // Extracting PR number from the issue
-            const workflowId = "magic8ballcomment.yaml"; // The file name of the workflow to be triggered
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
+            const issueNumber = context.issue.number; // The number of the issue (PR) the comment was made on
+            const issueComment = context.payload.comment.body; // The content of the comment
+            console.log(`Responding to comment on PR #${issueNumber}: ${issueComment}`);
 
-            // API Call to trigger the workflow dispatch
-            await github.request(`POST /repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`, {
-              ref: 'main', // Reference to the branch where the workflow is located
-              inputs: {
-                pull_request_number: prNumber.toString(), // Passing PR number as input
-              },
+            // Post a response comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: "🔮 Magic 8 Ball says... (your response here)",
             });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
