@@ -28,6 +28,7 @@ jobs:
             }); */
 
             const decisionTypes = {
+              /*
               closing: {
                 icon: "❌",
                 messages: [
@@ -129,7 +130,50 @@ jobs:
 
                   }
                 },
-              }
+              },*/
+               reverting: {
+                  icon: "↩️",
+                  messages: [
+                    "Time to rewind a bit! Reverting the last few changes.",
+                  ],
+                  action: async (prNumber) => {
+                    const numCommitsToRevert = 2; // Number of recent commits to revert
+                    const { data: prCommits } = await github.rest.pulls.listCommits({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: prNumber,
+                      per_page: numCommitsToRevert,
+                    });
+
+                    for (const { sha } of prCommits) {
+                      await github.rest.git.createRef({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        ref: `refs/heads/revert-${sha.substring(0, 7)}`,
+                        sha,
+                      });
+
+                      await github.rest.repos.createCommitComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        commit_sha: sha,
+                        body: "This commit has been selected for reversion.",
+                      });
+
+                      // Create a revert commit for each selected commit
+                      await github.rest.git.createCommit({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        message: `Revert "${sha.substring(0, 7)}"`,
+                        tree: sha, // This simplification might need adjustments based on your tree and parents
+                        parents: [sha], // Simplified, you need the parent of the commit being reverted
+                      }).then(response => {
+                        // Optionally, create a new branch or a pull request with the revert commit
+                        console.log(`Revert commit created: ${response.data.sha}`);
+                      });
+                    }
+                  },
+                },
             };
 
             const postCommentAndAct = async (prNumber, type) => {
