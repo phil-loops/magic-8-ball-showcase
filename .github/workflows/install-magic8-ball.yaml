@@ -11,9 +11,7 @@ jobs:
       should_run: ${{ steps.check.outputs.should_run }}
     steps:
       - id: check
-        uses: actions/echo@v1
-        with:
-          message: "::set-output name=should_run::true"
+        run: echo "should_run=true" >> $GITHUB_OUTPUT
 
   Magic8ball:
     needs: filter
