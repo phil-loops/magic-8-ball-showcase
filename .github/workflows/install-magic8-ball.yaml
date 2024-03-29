@@ -1,9 +1,15 @@
 name: Install ✨ 🎱
 on:
-  push:
-    branches:
-      - "**"
+  issue_comment:
+    types: [created, edited]
 
 jobs:
   Magic8ball:
-    uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/magic8ball')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Trigger Magic 8 Ball
+        uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
