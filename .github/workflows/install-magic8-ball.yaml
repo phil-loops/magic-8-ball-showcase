@@ -17,15 +17,6 @@ jobs:
           script: |
             const issueNumber = context.issue.number; // The number of the issue (PR) the comment was made on
             const issueComment = context.payload.comment.body; // The content of the comment
-            console.log(`Responding to comment on PR #${issueNumber}: ${issueComment}`);
-
-            /* ost a response comment
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ,
-              body: "🔮 Magic 8 Ball says... (your response here)",
-            }); */
 
             const decisionTypes = {
               closing: {
