@@ -11,9 +11,30 @@ jobs:
       should_run: ${{ steps.check.outputs.should_run }}
     steps:
       - id: check
-        run: echo "::set-output name=should_run::true"
+        uses: actions/echo@v1
+        with:
+          message: "::set-output name=should_run::true"
 
   Magic8ball:
     needs: filter
     if: needs.filter.outputs.should_run == 'true'
-    uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Magic 8 Ball Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = github.event.issue.number; // Extracting PR number from the issue
+            const workflowId = "magic8ballcomment.yaml"; // The file name of the workflow to be triggered
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // API Call to trigger the workflow dispatch
+            await github.request(`POST /repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`, {
+              ref: 'main', // Reference to the branch where the workflow is located
+              inputs: {
+                pull_request_number: prNumber.toString(), // Passing PR number as input
+              },
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
