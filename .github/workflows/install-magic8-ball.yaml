@@ -4,12 +4,16 @@ on:
     types: [created, edited]
 
 jobs:
-  Magic8ball:
+  filter:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/magic8ball')
     runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - id: check
+        run: echo "::set-output name=should_run::true"
 
-      - name: Trigger Magic 8 Ball
-        uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
+  Magic8ball:
+    needs: filter
+    if: needs.filter.outputs.should_run == 'true'
+    uses: phil-loops/LoopsMagic8Ball/.github/workflows/magic8ball.yaml@main
