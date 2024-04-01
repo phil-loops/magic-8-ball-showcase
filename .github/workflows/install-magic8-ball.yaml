@@ -19,32 +19,10 @@ jobs:
             const issueComment = context.payload.comment.body; // The content of the comment
 
             const decisionTypes = {
-              closing: {
-                icon: "❌",
-                messages: [
-                  "Let's keep that approach in our back pocket!",
-                  "Signs are indicating that we should do it another (better) way!",
-                  "Not a chance!",
-                  "Absolutely not, try again!",
-                ],
-                action: async (prNumber) => {
-                  await github.rest.pulls.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: prNumber,
-                    state: "closed",
-                  });
-                },
-              },
               merging: {
                 icon: "🎉",
                 messages: [
-                  "Absolutely!",
-                  "Definitely go for it!",
                   "Outlook is looking bright!",
-                  "Signs are pointing to a yes!",
-                  "Without a doubt, go for it!",
-                  "LGTM"
                 ],
                 action: async (prNumber) => {
                   await github.rest.pulls.merge({
@@ -54,73 +32,6 @@ jobs:
                   });
                 },
               },
-              neutral: {
-                icon: "🤔",
-                messages: [
-                  "Outlook is a bit cloudy...",
-                  "Can't predict now, try later!",
-                  "Focus and ask again!",
-                  "Response is unclear, try again!",
-                  "Ask again at a later time!",
-                ],
-                action: async () => { /* No action needed for neutral responses */ },
-              },
-              review: {
-                icon: "👀",
-                messages: [
-                  "Let's get some eyes on this!",
-                  "We need an outside opinion!",
-                  "Let's get a new set of eyes here!",
-                  "We need a review!",
-                ],
-                action: async (prNumber) => {
-                  const prDetails = await github.rest.pulls.get({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: prNumber,
-                  });
-                  const prAuthor = prDetails.data.user.login;
-
-                  // Fetch collaborators with write or admin permissions
-                  const collaborators = await github.rest.repos.listCollaborators({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    affiliation: 'direct',
-                  });
-
-                  // Filter out the PR author from the list of potential reviewers
-                  const reviewers = collaborators.data
-                    .filter(collaborator => (collaborator.permissions.push || collaborator.permissions.admin) && collaborator.login !== prAuthor)
-                    .map(collaborator => collaborator.login); 
-
-                  if (reviewers.length > 0) {
-                    const randomReviewer = reviewers[Math.floor(Math.random() * reviewers.length)];
-                    const res = await github.rest.pulls.requestReviewers({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      pull_number: prNumber,
-                      reviewers: [randomReviewer],
-                    });
-                    console.log('Requested a review from:', randomReviewer);
-                    console.log('Request review response:', res);
-                  } else {
-                    console.log('No eligible reviewers found that are not the PR author.');
-                    await github.rest.issues.createComment({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: prNumber,
-                      body: "Awkward... no reviewers are available now, so I'll hop in. Processing.  Processing. ⌛️",
-                    });
-                    await github.rest.issues.createComment({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: prNumber,
-                      body: "LGTM 👍",
-                    });
-
-                  }
-                },
-              }
             };
 
             const postCommentAndAct = async (prNumber, type) => {
