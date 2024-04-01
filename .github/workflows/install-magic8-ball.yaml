@@ -1,4 +1,4 @@
-name: Respond to PR Comment
+name: Respond to PR comment
 on:
   issue_comment:
     types: [created, edited]
@@ -8,7 +8,7 @@ jobs:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/magic8ball')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Respond to Comment
