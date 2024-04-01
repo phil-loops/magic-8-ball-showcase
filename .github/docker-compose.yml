@@ -1,0 +1,56 @@
+services:
+  # Service can be used as regular local db for development
+  psql:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+
+  # Service for the database while running through cypress tests -- runs on non-default Postgres port.
+  testing-psql:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=db
+    restart: unless-stopped
+    ports:
+      - 5430:5432
+    profiles:
+      - testing
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+      - 6378:6379
+    volumes:
+      - redis-data:/data
+      - redis-conf:/usr/local/etc/redis/redis.conf
+
+  email-metrics-redis:
+    image: "redis:alpine"
+    command: redis-server 
+    ports:
+      - 6377:6379
+    volumes:
+      - redis2-data:/data
+      - redis2-conf:/usr/local/etc/redis
+
+  serverless-redis-http:
+    ports:
+      - "8079:80"
+    image: hiett/serverless-redis-http:latest
+    environment:
+      SRH_MODE: env
+      SRH_TOKEN: loopedy-loop-loop
+      SRH_CONNECTION_STRING: "redis://redis:6379"
+
+volumes:
+  psql:
+  testing-psql:
+  redis-data:
+  redis-conf:
+  redis2-data:
+  redis2-conf:
