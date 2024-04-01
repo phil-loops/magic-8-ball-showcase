@@ -1,3 +1,4 @@
-just a normal, every day project
-
-:)
+aoeu
+aeuo
+aeou
+aueo
