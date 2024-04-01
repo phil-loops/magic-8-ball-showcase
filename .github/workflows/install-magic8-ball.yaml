@@ -31,7 +31,7 @@ jobs:
                     pull_number: prNumber,
                   });
                 },
-              },\
+              },
             };
 
             const postCommentAndAct = async (prNumber, type) => {
