@@ -19,6 +19,7 @@ jobs:
             const issueComment = context.payload.comment.body; // The content of the comment
 
             const decisionTypes = {
+              /*
               closing: {
                 icon: "❌",
                 messages: [
@@ -33,24 +34,6 @@ jobs:
                     repo: context.repo.repo,
                     pull_number: prNumber,
                     state: "closed",
-                  });
-                },
-              },
-              merging: {
-                icon: "🎉",
-                messages: [
-                  "Absolutely!",
-                  "Definitely go for it!",
-                  "Outlook is looking bright!",
-                  "Signs are pointing to a yes!",
-                  "Without a doubt, go for it!",
-                  "LGTM"
-                ],
-                action: async (prNumber) => {
-                  await github.rest.pulls.merge({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: prNumber,
                   });
                 },
               },
@@ -120,7 +103,25 @@ jobs:
 
                   }
                 },
-              }
+              },*/
+              merging: {
+                icon: "🎉",
+                messages: [
+                  "Absolutely!",
+                  "Definitely go for it!",
+                  "Outlook is looking bright!",
+                  "Signs are pointing to a yes!",
+                  "Without a doubt, go for it!",
+                  "LGTM"
+                ],
+                action: async (prNumber) => {
+                  await github.rest.pulls.merge({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: prNumber,
+                  });
+                },
+              },
             };
 
             const postCommentAndAct = async (prNumber, type) => {
