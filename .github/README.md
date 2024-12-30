@@ -10,13 +10,12 @@ aoeuaoeuaoue
 stnhhtnshnst
 htsnsnhths
 
-
 ueaohtsnshnt
 ueao
 sthnshtn
 changi
 :)
-uu
+uuhtshsntsnht
 
 more changes
 thshthstns
