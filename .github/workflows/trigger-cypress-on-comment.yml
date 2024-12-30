@@ -2,13 +2,12 @@ name: Comment-based Cypress Trigger
 
 on:
   issue_comment:
-    types:
-      - created
+    types: [created, edited]
 
 jobs:
   run-cypress:
     if: |
-      github.event.issue.pull_request != null && contains(github.event.comment.body, 'run-cypress')
+      github.event.issue.pull_request != null && contains(github.event.comment.body, '!cypress')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -16,3 +15,12 @@ jobs:
 
       - name: Debug Event Payload
         run: echo '${{ toJson(github.event) }}'
+
+      - name: Extract Branch Name
+        id: extract-branch
+        run: echo "branch_name=${{ github.event.issue.pull_request.head.ref }}" >> $GITHUB_ENV
+
+      - name: Trigger Cypress Checks
+        uses: Loops-so/loops/.github/workflows/run-cypress-checks.yml@main
+        with:
+          ref: ${{ env.branch_name }}
