@@ -2,7 +2,8 @@ name: Comment-based Cypress Trigger
 
 on:
   issue_comment:
-    types: created
+    types:
+      - created
 
 jobs:
   run-cypress:
