@@ -1,0 +1,16 @@
+name: Comment-based Cypress Trigger
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  run-cypress:
+    if: |
+      github.event.issue.pull_request != null && contains(github.event.comment.body, '!cypress')
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: HI
+        run: echo "hello world!"
