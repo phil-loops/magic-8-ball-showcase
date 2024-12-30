@@ -8,7 +8,7 @@ on:
 jobs:
   run-cypress:
     if: |
-      github.event.issue.pull_request != null && contains(github.event.comment.body, '!cypress')
+      github.event.issue.pull_request != null && contains(github.event.comment.body, 'run-cypress')
     uses: Loops-so/loops/.github/workflows/run-cypress-checks.yml@main
     with:
       ref: ${{ github.event.issue.pull_request.head.ref }}
