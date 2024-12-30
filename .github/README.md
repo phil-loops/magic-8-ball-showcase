@@ -10,10 +10,11 @@ aoeuaoeuaoue
 stnhhtnshnst
 htsnsnhths
 
-aoeu
+
+ueaohtsnshnt
 ueao
 sthnshtn
-some changi
+changi
 :)
 uu
 
